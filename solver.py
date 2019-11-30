@@ -4,6 +4,8 @@ sys.path.append('..')
 sys.path.append('../..')
 import argparse
 import utils
+import networkx as nx
+import numpy as np
 
 from student_utils import *
 """
@@ -25,6 +27,20 @@ def solve(list_of_locations, list_of_homes, starting_car_location, adjacency_mat
         A dictionary mapping drop-off location to a list of homes of TAs that got off at that particular location
         NOTE: both outputs should be in terms of indices not the names of the locations themselves
     """
+    name_to_index = {name: i for i, name in enumerate(list_of_locations)}
+    homes = [name_to_index[name] for name in list_of_homes]
+    start = [name_to_index[starting_car_location]]
+    V = len(homes)
+
+    G = nx.Graph()
+    G.add_nodes_from(range(V))
+    for i in range(V):
+        for j in range(i+1, V):
+            if adjacency_matrix[i][j] != "x":
+                G.add_edge(i, j, weight=float(adjacency_matrix[i][j]))
+                
+    
+
     pass
 
 """
