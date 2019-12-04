@@ -23,4 +23,5 @@ def solve(list_of_homes, starting_car_location, G, params=[]):
         tleft = pulp.LpVariable('tleft', lowBound=0, cat='Integer')
         tright = pulp.LpVariable('tright', lowBound=0, cat='Integer')
         prob += de * ((rleft + rright) * 2 / 3 + tleft + tright), "Total Cost of Path"
+        # G.edge[edge[0]][edge[1]]['weight']
     prob.solve()
