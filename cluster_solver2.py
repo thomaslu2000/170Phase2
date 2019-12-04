@@ -1,8 +1,8 @@
 import networkx as nx
-from cluster import kcenter, travelingSalesman, getWeight
+from cluster import kcenter
+from tsp import travelingSalesman, getWeight
 
-
-def solve(list_of_homes, start, G, repeat=2, params=[]):
+def solve(list_of_homes, start, G, repeat=1, params=[]):
     """
     Write your algorithm here.
     Input:
@@ -53,11 +53,11 @@ def getNew(G, homes, start, k, repeat):
             
 
 def solve(G, clusters, start):
-    sum = 0
+    val = 0
     tour = travelingSalesman(G, [c[0] for c in clusters], start)
     for i in range(len(tour) - 1)
-        sum += getWeight(G, i, i+1, tour)
+        val += getWeight(G, i, i+1, tour)
     for c in clusters:
         for home in c[1]:
-            sum += getWeight(G, home, c[0])
-    return sum, tour
+            val += getWeight(G, home, c[0])
+    return val, tour

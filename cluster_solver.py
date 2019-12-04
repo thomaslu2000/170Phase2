@@ -1,5 +1,6 @@
 import networkx as nx
-from cluster import kcenter, travelingSalesman, getWeight
+from cluster import kcenter
+from tsp import travelingSalesman, getWeight
 
 def solve(list_of_homes, start, G, params=[]):
     """
