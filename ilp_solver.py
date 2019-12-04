@@ -1,3 +1,6 @@
+from pulp import *
+import networkx as nx
+
 def solve(list_of_homes, starting_car_location, G, params=[]):
     """
     Write your algorithm here.
@@ -11,5 +14,13 @@ def solve(list_of_homes, starting_car_location, G, params=[]):
         NOTE: both outputs should be in terms of indices not the names of the locations themselves
     """
     # create graph of only homes
-    # 
-    pass
+
+    prob = LpProblem("Drive TAs Home", LpMinimize)
+    for every edge in G:
+        de = orig edge weight
+        rleft = pulp.LpVariable('rleft', lowBound=0, upBound = 1, cat='Integer')
+        rright = pulp.LpVariable('rright', lowBound=0, upBound = 1, cat='Integer')
+        tleft = pulp.LpVariable('tleft', lowBound=0, cat='Integer')
+        tright = pulp.LpVariable('tright', lowBound=0, cat='Integer')
+        prob += de * ((rleft + rright) * 2 / 3 + tleft + tright), "Total Cost of Path"
+    prob.solve()
