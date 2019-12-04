@@ -1,33 +1,8 @@
 import random
 import numpy as np
 import networkx as nx
+import time
 import math
-
-"""
-
-@SEO MAYBE THIS WILL BE GOOD ?????
-https://www.geeksforgeeks.org/k-centers-problem-set-1-greedy-approximate-algorithm/
-see if someone else implemented it online and copy/cite
-
-
-
-"""
-
-
-def kcenter(G, vertices, first_center=None, clusters=2):
-    """
-    Input:
-        G: graph of the nodes we want to cluster
-        vertices: cluster the vertices in vertices to two groups
-        k: always just do 2??
-        first_center: if we want to specify the first center that should be randomly chosen
-    Output:
-        output 2 lists: each list holds the center vertex, and 
-        [center 1, cluster 1], [center 2,  cluster 2]
-    """
-
-    pass
-
 
 def travelingSalesman(G, vertices, start):
     """
@@ -41,8 +16,6 @@ def travelingSalesman(G, vertices, start):
     Output:
         A list of vertices to visit in order of visitation
     """
-    if len(vertices) <= 1:
-        return vertices
     try:
         vertices.remove(start)
     except ValueError:
@@ -75,7 +48,43 @@ def travelingSalesman(G, vertices, start):
 def getWeight(G, i, j, vertices=None):
     if i == j:
         return 0
-    if vertices:
+    if vertices is not None:
         return G.get_edge_data(vertices[i], vertices[j])["weight"]
     else:
         return G.get_edge_data(i, j)["weight"]
+
+
+
+# change this too
+items = 200
+
+V = np.random.randint(int(items * 9/10), items ) # vertices
+
+# name array thingy, pls change
+randnames = np.random.randint(1, 5600)
+names = [hex(i * randnames + randnames)[2:] for i in range(V + 1)]
+random.shuffle(names)
+
+
+
+homes = random.sample(range(V), np.random.randint(int(V / 3), int(items / 2) ))
+
+positions = np.random.rand(V, 2)
+differences = positions[:, None, :] - positions[None, :, :]
+distances = np.sqrt(np.sum(differences**2, axis=-1))
+distances = np.multiply(distances, 100)
+distances = np.around(distances, decimals=5)
+
+graph = nx.from_numpy_matrix(distances, create_using=nx.Graph())
+
+t0 = time.time()
+travelingSalesman(graph, homes, 0)
+print(time.time() - t0)
+
+t0 = time.time()
+travelingSalesman(graph, homes, 0)
+print(time.time() - t0)
+
+t0 = time.time()
+travelingSalesman(graph, homes, 0)
+print(time.time() - t0)
