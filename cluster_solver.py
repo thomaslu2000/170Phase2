@@ -12,4 +12,5 @@ def solve(list_of_homes, starting_car_location, G, params=[]):
     """
     # create graph of only homes
     # 
+    
     pass

@@ -7,6 +7,7 @@ def cluster(G):
     Output:
         2 lists for the different clusters
     """
+
     pass
 
 def findMiddle():
@@ -17,4 +18,5 @@ def findMiddle():
     Output:
         the middlest node index
     """
+    # maybe try an O(n^2) thing, find the sum of distances, and pick the node that has the lowest of these sums
     pass
