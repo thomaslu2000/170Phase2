@@ -16,7 +16,7 @@ def solve(list_of_homes, starting_car_location, G, params=[]):
     # create graph of only homes
 
     prob = LpProblem("Drive TAs Home", LpMinimize)
-    for every edge in G:
+    for e in G.edges():
         de = orig edge weight
         rleft = pulp.LpVariable('rleft', lowBound=0, upBound = 1, cat='Integer')
         rright = pulp.LpVariable('rright', lowBound=0, upBound = 1, cat='Integer')
