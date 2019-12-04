@@ -2,7 +2,7 @@ import networkx as nx
 from cluster import kcenter, travelingSalesman, getWeight
 
 
-def solve(list_of_homes, start, G, params=[]):
+def solve(list_of_homes, start, G, repeat=2, params=[]):
     """
     Write your algorithm here.
     Input:
@@ -15,22 +15,42 @@ def solve(list_of_homes, start, G, params=[]):
         NOTE: both outputs should be in terms of indices not the names of the locations themselves
     
     """
+
+
     old_clusters = [ [start, list_of_homes] ]
     old_val, old_tour = solve(G, old_clusters, start)
+    best_val, best_tour, best_clusters = old_val, old_tour, old_clusters
 
-    new_clusters = kcenter(G, list_of_homes, first_center=start, clusters=2)
-    new_val, new_tour = solve(G, new_clusters, start)
+    new_val, new_tour, new_clusters = getNew(G, list_of_homes, start, 2, repeat)
     k = 3
+    cont = int(len(list_of_homes) / 20)
+    if new_val < old_val:
+        cont -= 1
 
-    while (k <= len(list_of_homes) and new_val > old_val):
-        old_clusters = new_clusters
-        old_val, old_tour = new_val, new_tour
+    while (k <= len(list_of_homes) and cont > 0):
+        old_val, old_tour, old_clusters = new_val, new_tour, new_clusters
+        if old_val < best_val:
+            best_val, best_tour, best_clusters = old_val, old_tour, old_clusters
         new_clusters = kcenter(G, list_of_homes, first_center=start, clusters=k)
         new_val, new_tour = solve(G, new_clusters, start)
         k += 1
-    
-    return old_tour, {c[0]: c[1] for c in old_clusters}
+        if new_val < old_val:
+            cont -= 1
 
+    
+    return best_tour, {c[0]: c[1] for c in best_clusters}
+
+def getNew(G, homes, start, k, repeat):
+    best_clusters = kcenter(G, list_of_homes, first_center=start, clusters=k)
+    best_val, best_tour = solve(G, best_clusters, start)
+    for i in range(repeat - 1):
+        next_clusters = kcenter(G, list_of_homes, first_center=start, clusters=k)
+        next_val, next_tour = solve(G, next_clusters, start)
+        if next_val < best_val:
+            best_val, best_tour, best_clusters = next_val, next_tour, next_clusters
+    return best_val, best_tour, best_clusters
+
+            
 
 def solve(G, clusters, start):
     sum = 0
