@@ -33,4 +33,4 @@ def MST(G, vertices):
     output the edges of the mst of ONLY the vertices in vertices
     """
     H = nx.minimum_spanning_tree(G.subgraph(vertices), weight="weight")
-    return H.edges()
+    return H.edges(data=True)

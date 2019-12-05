@@ -4,7 +4,37 @@ import networkx as nx
 import math
 from cluster import MST
 
+
+
 def travelingSalesman(G, vertices, start):
+    """
+    Christofides' algorithm to approximate tsp
+    """
+    mst_edges = MST(G, vertices)
+    print(mst_edges)
+    mst_graph = nx.empty_graph(vertices)
+    mst_graph.add_edges_from(mst_edges)
+    
+    O = []
+    for v in vertices:
+        if mst_graph.degree(v) % 2 == 1:
+            O.append(v)
+    
+    m = G.subgraph(O)
+    for u, v, data in m.edges(data=True):
+        data['weight'] *= -1
+    
+    P = nx.algorithms.matching.max_weight_matching(m, weight="weight")
+    for u, v in P:
+        mst_graph.add_edge(u, v, weight=getWeight(G, u, v))
+    
+    euler = nx.eulerian_circuit(mst_graph)
+    for r in euler:
+        print(r)
+    pass
+
+
+def travelingSalesmanOld(G, vertices, start):
     """
     Approximation algo for tsp modified from 
     https://ericphanson.com/blog/2016/the-traveling-salesman-and-10-lines-of-python/
@@ -29,7 +59,7 @@ def travelingSalesman(G, vertices, start):
     except ValueError:
         pass
     random.shuffle(vertices)
-    temp = 10e6
+    temp = 10e8
     while (temp > 1):
         [i,j] = sorted(random.sample(range(len(vertices)),2))
 
@@ -58,7 +88,7 @@ def travelingSalesman(G, vertices, start):
             for i in range(len(vertices) - 1):
                 score += getWeight(G, i, i+1, vertices)
             if score > 2* min_span:
-                temp = 5
+                temp = 100
     return [start] + vertices + [start]
 
 def getWeight(G, i, j, vertices=None):
