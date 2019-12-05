@@ -1,32 +1,39 @@
-import random
-import numpy as np
 import networkx as nx
 import math
 
-"""
-
-@SEO MAYBE THIS WILL BE GOOD ?????
-https://www.geeksforgeeks.org/k-centers-problem-set-1-greedy-approximate-algorithm/
-see if someone else implemented it online and copy/cite
-
-
-
-"""
+def getWeight(G, i, j, vertices=None):
+    if i == j:
+        return 0
+    if vertices:
+        return G.get_edge_data(vertices[i], vertices[j])["weight"]
+    else:
+        return G.get_edge_data(i, j)["weight"]
 
 
-def kcenter(G, vertices, first_center=None, clusters=2):
+def kcenter(G, homes, first_center, clusters):
     """
     Input:
         G: graph of the nodes we want to cluster
-        vertices: cluster the vertices in vertices to two groups
-        k: always just do 2??
-        first_center: if we want to specify the first center that should be randomly chosen
+        homes: cluster these!
     Output:
         output 2 lists: each list holds the center vertex, and 
         [center 1, cluster 1], [center 2,  cluster 2]
     """
+    options = list(G)
+    options.remove(first_center)
+    cs = [first_center]
+    for i in range(clusters - 1):
+        next_clus = max(options, key=lambda v: min([getWeight(G, v, c) for c in cs]))
+        cs.append(next_clus)
+        options.remove(next_clus)
 
-    pass
+    d = {c:[] for c in cs}
+    for home in homes:
+        closest = min(cs, key=lambda x: getWeight(G, x, home))
+        d[closest].append(home)
+    
+    return [[c, d[c]] for c in cs if d[c]]
+
 
 def MST(G, vertices):
     """

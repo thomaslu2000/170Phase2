@@ -5,7 +5,8 @@ import time
 import math
 
 from tsp import travelingSalesman, getWeight
-from cluster import MST
+from cluster import MST, kcenter
+from cluster_solver2 import solve, score
 
 # change this too
 items = 200
@@ -31,7 +32,10 @@ graph = nx.from_numpy_matrix(distances, create_using=nx.Graph())
 print("start")
 
 t0 = time.time()
-a = travelingSalesman(graph, homes + [0], 0)
+# print(kcenter(graph, homes, 0, 100))
+# a = travelingSalesman(graph, homes + [0], 0)
+tour, clusters = solve(graph, homes, 0)
 print(time.time() - t0)
-print(sum([getWeight(graph, i, i+1, a) for i in range(len(a) - 1)]))
+print(clusters)
+print(score(graph, clusters, 0))
 
