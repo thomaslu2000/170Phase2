@@ -33,11 +33,11 @@ def solve(list_of_locations, list_of_homes, starting_car_location, adjacency_mat
     V = len(homes)
 
     G = nx.Graph()
-    G.add_nodes_from(range(V))
+    G.add_nodes_from(homes)
     for i in range(V):
         for j in range(i+1, V):
             if adjacency_matrix[i][j] != "x":
-                G.add_edge(i, j, weight=float(adjacency_matrix[i][j]))
+                G.add_edge(homes[i], homes[j], weight=float(adjacency_matrix[i][j]))
                 
     
 

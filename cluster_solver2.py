@@ -6,7 +6,7 @@ def solve(list_of_homes, start, G, repeat=1, params=[]):
     """
     Write your algorithm here.
     Input:
-        list_of_homes: A list of homes indices in their integer form (for networkx)
+        list_of_homes: A list of homes indices with their string names (for networkx)
         start: starting_car_location, The index of the starting location for the car
         G: the populated graph with edges and stuff
     Output:
