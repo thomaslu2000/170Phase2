@@ -1,22 +1,36 @@
+import random
+import numpy as np
+import networkx as nx
+import math
 
-def cluster(G):
+"""
+
+@SEO MAYBE THIS WILL BE GOOD ?????
+https://www.geeksforgeeks.org/k-centers-problem-set-1-greedy-approximate-algorithm/
+see if someone else implemented it online and copy/cite
+
+
+
+"""
+
+
+def kcenter(G, vertices, first_center=None, clusters=2):
     """
     Input:
         G: graph of the nodes we want to cluster
+        vertices: cluster the vertices in vertices to two groups
         k: always just do 2??
+        first_center: if we want to specify the first center that should be randomly chosen
     Output:
-        2 lists for the different clusters
+        output 2 lists: each list holds the center vertex, and 
+        [center 1, cluster 1], [center 2,  cluster 2]
     """
 
     pass
 
-def findMiddle():
+def MST(G, vertices):
     """
-    Input:
-        G: graph of all the nodes/edges
-        nodes: we want to find the node thats most at the middle of this list
-    Output:
-        the middlest node index
+    output the edges of the mst of ONLY the vertices in vertices
     """
-    # maybe try an O(n^2) thing, find the sum of distances, and pick the node that has the lowest of these sums
-    pass
+    H = nx.minimum_spanning_tree(G.subgraph(vertices), weight="weight")
+    return H.edges(data=True)
