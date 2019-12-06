@@ -11,16 +11,11 @@ def getWeight(G, i, j, vertices=None):
 
 
 def kcenter(G, homes, first_center, clusters):
-    """
-    Input:
-        G: graph of the nodes we want to cluster
-        homes: cluster these!
-    Output:
-        output 2 lists: each list holds the center vertex, and 
-        [center 1, cluster 1], [center 2,  cluster 2]
-    """
-    options = list(G)
-    options.remove(first_center)
+    if clusters == len(homes) + 1:
+        return [[home, [home]]  for home in homes]
+    options = homes[:]
+    if first_center in options:
+        options.remove(first_center)
     cs = [first_center]
     for i in range(clusters - 1):
         next_clus = max(options, key=lambda v: min([getWeight(G, v, c) for c in cs]))

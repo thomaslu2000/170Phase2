@@ -5,7 +5,7 @@ import time
 import math
 
 from tsp import travelingSalesman, getWeight
-from cluster import MST, kcenter
+from cluster import MST, kcenter, getWeight
 from cluster_solver2 import solve, score
 
 # change this too
@@ -20,7 +20,7 @@ random.shuffle(names)
 
 
 
-homes = random.sample(range(V), np.random.randint(int(V / 3), int(items / 2) ))
+homes = random.sample(range(V), int(items/2))#np.random.randint(int(V / 3), int(items / 2) ))
 
 positions = np.random.rand(V, 2)
 differences = positions[:, None, :] - positions[None, :, :]
@@ -29,6 +29,10 @@ distances = np.multiply(distances, 100)
 distances = np.around(distances, decimals=5)
 
 graph = nx.from_numpy_matrix(distances, create_using=nx.Graph())
+
+# graph = nx.Graph()
+# graph.add_nodes_from(range(50))
+
 print("start")
 
 t0 = time.time()
@@ -36,6 +40,15 @@ t0 = time.time()
 # a = travelingSalesman(graph, homes + [0], 0)
 tour, clusters = solve(graph, homes, 0)
 print(time.time() - t0)
-print(clusters)
-print(score(graph, clusters, 0))
+s, t = score(graph, [[k,v] for k,v in clusters.items()], 0)
+print(s)
+a = sorted([[k,v] for k,v in clusters.items()])
 
+s2, tour2 = score(graph, [[home, [home]] for home in homes] + [[0, [0]]], 0)
+# s = sum([getWeight(graph, i, i+1, travel) for i in range(len(travel) - 1)])
+# s *= 2 / 3
+print(s2)
+if s > s2:
+    print(sorted(tour2))
+    print(sorted(t))
+    print(sorted(homes))
