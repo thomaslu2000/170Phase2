@@ -39,12 +39,16 @@ def solve(list_of_locations, list_of_homes, starting_car_location, adjacency_mat
         for j in range(i+1, V):
             if adjacency_matrix[i][j] != "x":
                 G.add_edge(homes[i], homes[j], weight=float(adjacency_matrix[i][j]))
-            else:
-                G.add_edge(homes[i], homes[j], weight=)
-                
-    
+            #else:
+            #    G.add_edge(homes[i], homes[j], weight=float(nx.shortest_path_length(G, homes[i], homes[j], 'weight')))
+    for i in range(V):
+        for j in range(i+1, V):
+            if adjacency_matrix[i][j] == "x":
+                G.add_edge(homes[i], homes[j], weight=float(nx.shortest_path_length(G, homes[i], homes[j], 'weight')))
 
-    pass
+    return clusterSolve(G, list_of_homes, starting_car_location);   
+
+    #pass
 
 """
 ======================================================================
