@@ -6,6 +6,7 @@ import argparse
 import utils
 import networkx as nx
 import numpy as np
+from cluster_solver2 import solve as clusterSolve
 
 from student_utils import *
 """
@@ -38,6 +39,8 @@ def solve(list_of_locations, list_of_homes, starting_car_location, adjacency_mat
         for j in range(i+1, V):
             if adjacency_matrix[i][j] != "x":
                 G.add_edge(homes[i], homes[j], weight=float(adjacency_matrix[i][j]))
+            else:
+                G.add_edge(homes[i], homes[j], weight=)
                 
     
 
