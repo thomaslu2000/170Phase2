@@ -1,6 +1,7 @@
 import networkx as nx
 from cluster import kcenter
 from tsp import travelingSalesman, getWeight
+from itertools import permutations
 
 def solve(G, list_of_homes, start, params=[]):
     """
@@ -27,12 +28,18 @@ def solve(G, list_of_homes, start, params=[]):
     return best_tour, {c[0]: c[1] for c in best_clusters}   
             
 def score(G, clusters, start):
-    val = 0
     tour = travelingSalesman(G, [c[0] for c in clusters] + [start], start)
+    val = getVal(G, tour, clusters)
+    return val, tour
+
+
+def getVal(G, tour, clusters=None):
+    val = 0
     for i in range(len(tour) - 1):
         val += getWeight(G, i, i+1, tour)
     val *= 2 / 3
-    for center, homes in clusters:
-        for home in homes:
-            val += getWeight(G, center, home)
-    return val, tour
+    if clusters:
+        for center, homes in clusters:
+            for home in homes:
+                val += getWeight(G, center, home)
+    return val

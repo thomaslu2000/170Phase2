@@ -6,7 +6,7 @@ import math
 
 from tsp import travelingSalesman, getWeight
 from cluster import MST, kcenter, getWeight
-from cluster_solver2 import solve, score
+from cluster_solver2 import solve, score, trueTSP
 
 # change this too
 items = 200
@@ -52,3 +52,9 @@ if s > s2:
     print(sorted(tour2))
     print(sorted(t))
     print(sorted(homes))
+
+t0 = time.time()
+# print(kcenter(graph, homes, 0, 100))
+# a = travelingSalesman(graph, homes + [0], 0)
+tour = trueTSP(graph, homes, 0)
+print(time.time() - t0)
