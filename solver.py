@@ -28,23 +28,23 @@ def solve(list_of_locations, list_of_homes, starting_car_location, adjacency_mat
         A dictionary mapping drop-off location to a list of homes of TAs that got off at that particular location
         NOTE: both outputs should be in terms of indices not the names of the locations themselves
     """
-    name_to_index = {name: i for i, name in enumerate(list_of_locations)}
-    homes = [name_to_index[name] for name in list_of_homes]
-    start = [name_to_index[starting_car_location]]
-    V = len(homes)
+    homes = list_of_homes
+    start = starting_car_location
+    V = len(list_of_locations)
 
     G = nx.Graph()
-    G.add_nodes_from(homes)
+    G.add_nodes_from(list_of_locations)
     for i in range(V):
         for j in range(i+1, V):
             if adjacency_matrix[i][j] != "x":
-                G.add_edge(homes[i], homes[j], weight=float(adjacency_matrix[i][j]))
+                G.add_edge(list_of_locations[i], list_of_locations[j], weight=float(adjacency_matrix[i][j]))
+    shortest_paths = dict(nx.all_pairs_shortest_path(G))
     for i in range(V):
         for j in range(i+1, V):
             if adjacency_matrix[i][j] == "x":
-                G.add_edge(homes[i], homes[j], weight=float(nx.shortest_path_length(G, homes[i], homes[j], 'weight')))
+                G.add_edge(list_of_locations[i], list_of_locations[j], weight=float(nx.shortest_path_length(G, list_of_locations[i], list_of_locations[j], 'weight')))
 
-    return clusterSolve(G, homes, start);   
+    return clusterSolve(G, homes, start, shortest_paths, adjacency_matrix, list_of_locations)
 
     #pass
 

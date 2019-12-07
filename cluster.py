@@ -26,7 +26,6 @@ def kcenter(G, homes, first_center, clusters):
     for home in homes:
         closest = min(cs, key=lambda x: getWeight(G, x, home))
         d[closest].append(home)
-    
     return [[c, d[c]] for c in cs if d[c]]
 
 

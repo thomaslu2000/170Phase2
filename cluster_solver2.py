@@ -3,7 +3,7 @@ from cluster import kcenter
 from tsp import travelingSalesman, getWeight
 from itertools import permutations
 
-def solve(G, list_of_homes, start, params=[]):
+def solve(G, list_of_homes, start, actualPaths, adjMat, locationThing, params=[]):
     """
     Write your algorithm here.
     Input:
@@ -15,7 +15,7 @@ def solve(G, list_of_homes, start, params=[]):
         A dictionary mapping drop-off location to a list of homes of TAs that got off at that particular location
     """
     
-    old_clusters = [ [start, list_of_homes] ]
+    old_clusters = [[start, list_of_homes]] 
     old_val, old_tour = score(G, old_clusters, start)
     best_val, best_tour, best_clusters = old_val, old_tour, old_clusters
 
@@ -25,7 +25,18 @@ def solve(G, list_of_homes, start, params=[]):
         if new_val < best_val:
             best_val, best_tour, best_clusters = new_val, new_tour, new_clusters
     
-    return best_tour, {c[0]: c[1] for c in best_clusters}   
+    placeToIndex = {i: home for home, i in enumerate(locationThing)}
+    bestTourIndices = [placeToIndex[h] for h in best_tour]
+
+    i = 0
+    while i < len(bestTourIndices) - 1:
+        if adjMat[bestTourIndices[i]][bestTourIndices[i+1]] == "x":
+            bestTourIndices[i+1:i+1] = [placeToIndex[v] for v in actualPaths[locationThing[bestTourIndices[i]]][locationThing[bestTourIndices[i+1]]]][1:-1]
+        i += 1
+    for i in range(len(bestTourIndices) - 1):
+        if adjMat[bestTourIndices[i]][bestTourIndices[i+1]] == "x":
+            print("adsfsafasd")
+    return bestTourIndices, {placeToIndex[c[0]]: [placeToIndex[f] for f in c[1]] for c in best_clusters}   
             
 def score(G, clusters, start):
     tour = travelingSalesman(G, [c[0] for c in clusters] + [start], start)
