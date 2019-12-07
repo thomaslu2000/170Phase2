@@ -14,7 +14,7 @@ def solve(G, list_of_homes, start, params=[]):
         A dictionary mapping drop-off location to a list of homes of TAs that got off at that particular location
     """
     
-    old_clusters = [ [start, list_of_homes] ]
+    old_clusters = [[start, list_of_homes]] 
     old_val, old_tour = score(G, old_clusters, start)
     best_val, best_tour, best_clusters = old_val, old_tour, old_clusters
 
@@ -24,7 +24,9 @@ def solve(G, list_of_homes, start, params=[]):
         if new_val < best_val:
             best_val, best_tour, best_clusters = new_val, new_tour, new_clusters
     
-    return best_tour, {c[0]: c[1] for c in best_clusters}   
+    placeToIndex = {i: home for home, i in enumerate(list(G))}
+
+    return [placeToIndex[h] for h in best_tour], {placeToIndex[c[0]]: [placeToIndex[f] for f in c[1]] for c in best_clusters}   
             
 def score(G, clusters, start):
     val = 0
