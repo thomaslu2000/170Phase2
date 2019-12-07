@@ -2,7 +2,7 @@ import networkx as nx
 from cluster import kcenter
 from tsp import travelingSalesman, getWeight
 
-def solve(G, list_of_homes, start, params=[]):
+def solve(G, list_of_homes, start, actualPaths, adjMat, locationThing, params=[]):
     """
     Write your algorithm here.
     Input:
@@ -24,9 +24,18 @@ def solve(G, list_of_homes, start, params=[]):
         if new_val < best_val:
             best_val, best_tour, best_clusters = new_val, new_tour, new_clusters
     
-    placeToIndex = {i: home for home, i in enumerate(list(G))}
+    placeToIndex = {i: home for home, i in enumerate(locationThing)}
+    bestTourIndices = [placeToIndex[h] for h in best_tour]
 
-    return [placeToIndex[h] for h in best_tour], {placeToIndex[c[0]]: [placeToIndex[f] for f in c[1]] for c in best_clusters}   
+    i = 0
+    while i < len(bestTourIndices) - 1:
+        if adjMat[bestTourIndices[i]][bestTourIndices[i+1]] == "x":
+            bestTourIndices[i+1:i+1] = [placeToIndex[v] for v in actualPaths[locationThing[bestTourIndices[i]]][locationThing[bestTourIndices[i+1]]]][1:-1]
+        i += 1
+    for i in range(len(bestTourIndices) - 1):
+        if adjMat[bestTourIndices[i]][bestTourIndices[i+1]] == "x":
+            print("adsfsafasd")
+    return bestTourIndices, {placeToIndex[c[0]]: [placeToIndex[f] for f in c[1]] for c in best_clusters}   
             
 def score(G, clusters, start):
     val = 0

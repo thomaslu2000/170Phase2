@@ -38,12 +38,13 @@ def solve(list_of_locations, list_of_homes, starting_car_location, adjacency_mat
         for j in range(i+1, V):
             if adjacency_matrix[i][j] != "x":
                 G.add_edge(list_of_locations[i], list_of_locations[j], weight=float(adjacency_matrix[i][j]))
+    shortest_paths = dict(nx.all_pairs_shortest_path(G))
     for i in range(V):
         for j in range(i+1, V):
             if adjacency_matrix[i][j] == "x":
                 G.add_edge(list_of_locations[i], list_of_locations[j], weight=float(nx.shortest_path_length(G, list_of_locations[i], list_of_locations[j], 'weight')))
 
-    return clusterSolve(G, homes, start)
+    return clusterSolve(G, homes, start, shortest_paths, adjacency_matrix, list_of_locations)
 
     #pass
 
